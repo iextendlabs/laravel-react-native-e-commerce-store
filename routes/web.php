@@ -3,8 +3,10 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,10 +32,19 @@ Route::middleware('guest')->group(function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('admin-dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('dashboard', [AuthController::class, 'dashboard']);
     Route::get('logout', [AuthController::class, 'destroy']);
 
+    // category
+    Route::resource('categories', CategoryController::class)->parameters([
+        'categories' =>  'category:slug',
+    ]);
+
+    // product
+    Route::resource('products', ProductController::class)->parameters([
+        'products' =>  'products:slug',
+    ]);
     
 });
 

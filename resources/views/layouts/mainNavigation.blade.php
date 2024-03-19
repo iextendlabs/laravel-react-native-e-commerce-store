@@ -40,7 +40,11 @@
             <nav>
                 <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
                     @auth
+                    @if (Auth::user()->role == 'admin')
+                    <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="admin">Dashboard</a></li>
+                    @else
                     <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="dashboard">Dashboard</a></li>
+                    @endif
                     <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="logout">Logout</a></li>
                     @else
                     <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="login">Login</a></li>
