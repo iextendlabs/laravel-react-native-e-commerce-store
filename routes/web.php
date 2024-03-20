@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
 
     // product
     Route::resource('products', ProductController::class)->parameters([
-        'products' =>  'products:slug',
+        'products' =>  'product:slug',
     ]);
     
 });

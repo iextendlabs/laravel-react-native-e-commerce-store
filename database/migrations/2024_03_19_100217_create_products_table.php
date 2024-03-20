@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('image');
-            $table->integer('prince')->unsigned();
-            $table->integer('quantity')->unsigned();
+            $table->decimal('price')->unsigned();
+            $table->decimal('quantity')->unsigned();
             $table->text('description')->nullable();
 
             $table->foreignId('category_id')->constrained();

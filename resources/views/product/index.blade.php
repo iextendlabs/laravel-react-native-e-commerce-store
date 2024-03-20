@@ -22,17 +22,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @if ($category->count() > 0)
-                                @foreach ($category as $item)
+                            @if ($product->count() > 0)
+                                @foreach ($product as $item)
                                     <tr class="border-2 border-neutral-200 dark:border-white/10">
                                         <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $item->name }}</td>
-                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->description }}</td>
-                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->parent }}</td>
+                                        <td class="whitespace-nowrap px-6 py-4"><img src="{{ 'storage/products/thumb/'.$item->image }}" alt=""></td>
+                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->price }}</td>
+                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->quantity }}</td>
+                                        <td class="whitespace-nowrap px-6 py-4">{{ Str::limit($item->description, 8) }}</td>
                                         <td class="whitespace-nowrap px-6 py-4 flex">
-                                            <a href="{{ route('categories.edit', ['category' => $item->slug]) }}"
+                                            <a href="{{ route('products.edit', ['product' => $item->slug]) }}"
                                                 class="text-blue-500 dark:text-gray-400">Edit</a>
                                             <form
-                                                action="{{ route('categories.destroy', ['category' => $item->slug]) }}"
+                                                action="{{ route('products.destroy', ['product' => $item->slug]) }}"
                                                 method="POST">
                                                 @csrf
                                                 @method('DELETE')
@@ -42,11 +44,11 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                            @else --}}
+                            @else
                                 <tr>
                                     <td colspan="4">No categories found.</td>
                                 </tr>
-                            {{-- @endif --}}
+                            @endif
 
 
 

@@ -1,18 +1,20 @@
 <x-admin-layout>
-    <h1>Product create</h1>
+    @include('../include/error')
+    <h1>Product Update</h1>
     <a href="{{ route('products.index') }}" class="bg-blue-500 float-right hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Back</a>
 
     <div class="mx-auto block max-w-lg rounded-lg bg-white p-6 shadow-4 dark:bg-surface-dark">
 
-        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('products.update', ['product' => $product->slug]) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
                     Name
                 </label>
                 <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="name" type="text" name="name" placeholder="name">
+                    id="name" type="text" value="{{ $product->name }}" name="name" placeholder="name">
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
@@ -28,7 +30,7 @@
                 </label>
                 <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="price" type="text" name="price" placeholder="price">
+                    id="price" type="text" name="price" value="{{ $product->price }}" placeholder="price">
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
@@ -36,7 +38,7 @@
                 </label>
                 <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="quantity" type="text" name="quantity" placeholder="quantity">
+                    id="quantity" type="text" name="quantity" value="{{ $product->quantity }}" placeholder="quantity">
             </div>
 
             <div class="mb-4">
@@ -45,14 +47,14 @@
                 </label>
                 <textarea
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username" type="text" name="description" placeholder="deccsription"></textarea>
+                    id="username" type="text" name="description" value="{{ $product->description }}" placeholder="deccsription"></textarea>
             </div>
             <div class="inline-block relative ">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
                     Parent Category
                 </label>
                 <select
-                    class="block appearance-none w-96 my-2 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="category_id">
+                    class="block appearance-none w-96 my-2 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"  name="category_id">
                     @foreach ($category as $item)
                     <option value="{{ $item->id }}">{{ $item->name }}</option> 
                     @endforeach 
