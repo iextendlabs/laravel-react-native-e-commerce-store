@@ -7,7 +7,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProfileController;
+use App\Models\ProductImage;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class)->parameters([
         'products' =>  'product:slug',
     ]);
+
+    // product images
+    Route::resource('product-images', ProductImageController::class);
     
 });
 

@@ -21,14 +21,22 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'alpha', 'min:3', 'max:255'],
-            'image' => ['nullable', 'file', 'extensions:jpg,png'],
-            'price' => ['required', 'integer', 'min:2'],
+        if ($this->method() === 'PUT') {
+            $conditionalValidation = [
+                'image' => ['nullable', 'image'],
+            ];
+        } else {
+            $conditionalValidation = [
+                'image' => ['required', 'image', 'extensions:jpg,png'],
+            ];
+        }
+        return array_merge([
+            'name' => ['required', 'string', 'min:3', 'max:255'],
+            'price' => ['required', 'numeric', 'min:2'],
             'quantity' => ['required', 'numeric', 'min:2'],
             'description' => ['nullable', 'string',],
             'category_id' => ['required', 'exists:categories,id'],
 
-        ];
+        ], $conditionalValidation);
     }
 }

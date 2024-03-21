@@ -8,6 +8,7 @@ use App\Http\Controllers\Trait\FileUploadTrait;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\MockObject\Rule\MethodName;
 
 class ProductController extends Controller
 {
@@ -41,9 +42,6 @@ class ProductController extends Controller
         if ($image) $data['image'] = $image;
         $product = Product::create($data);
         return to_route('products.index');
-
-
-
     }
 
     /**
@@ -69,7 +67,18 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         $data = $request->only('name', 'price', 'quantity', 'description', 'image');
-        // dd($data);
+        if ($request->image) {
+            $imagePath = 'storage/products/' . $product->image;
+            $thumbPath = 'storage/products/thumb/' . $product->image;
+            if (file_exists($imagePath) && file_exists($imagePath)) {
+                unlink($imagePath);
+                unlink($thumbPath);
+            }
+
+        }
+        $data['slug'] = Str::slug($request->name);
+        $image = $this->saveFile($request, 'products', $data['slug']);
+        if ($image) $data['image'] = $image;
         $product->update($data);
         $product->save();
         return to_route('products.index');
@@ -80,12 +89,12 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $imagePath = 'storage/products/'.$product->image;
-        $thumbPath = 'storage/products/thumb/'.$product->image;
+        $imagePath = 'storage/products/' . $product->image;
+        $thumbPath = 'storage/products/thumb/' . $product->image;
         if (file_exists($imagePath)) {
             unlink($imagePath);
         }
-        
+
         if (file_exists($thumbPath)) {
             unlink($thumbPath);
         }

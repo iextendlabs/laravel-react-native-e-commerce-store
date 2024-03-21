@@ -42,11 +42,18 @@
             Category
         </a>
         <a href="products"
-        class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-        
-        <i class="fad fa-solid fa-shapes"></i>
-        Products
-    </a>
+            class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+
+            <i class="fad fa-solid fa-shapes"></i>
+            Products
+        </a>
+
+        <a href="product-images"
+            class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+
+            <i class="fad fa-solid fa-shapes"></i>
+            Products Image
+        </a>
         <!-- end link -->
 
 
