@@ -36,19 +36,19 @@
         <!-- end link -->
 
         <!-- link -->
-        <a href="categories"
+        <a href="/categories"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
             <i class="fad fa-sharp fa-regular fa-layer-group"></i>
             Category
         </a>
-        <a href="products"
+        <a href="/products"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
 
             <i class="fad fa-solid fa-shapes"></i>
             Products
         </a>
 
-        <a href="product-images"
+        <a href="/product-images"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
 
             <i class="fad fa-solid fa-shapes"></i>

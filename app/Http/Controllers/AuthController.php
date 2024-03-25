@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
@@ -13,7 +14,8 @@ class AuthController extends Controller
 {
     public function dashboard()
     {
-        return view('dashboard');
+        $product = Product::simplePaginate(11);;
+        return view('dashboard', compact('product'));
     }
 
     public function login()

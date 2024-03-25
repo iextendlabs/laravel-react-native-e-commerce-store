@@ -7,7 +7,7 @@
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="username" accept="image/*">
                     Name
                 </label>
                 <input

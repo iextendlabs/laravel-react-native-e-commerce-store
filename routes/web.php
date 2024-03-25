@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProductController;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 
 Route::get('/', [FrontendController::class, 'home']);
 
@@ -42,16 +44,22 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class)->parameters([
         'categories' =>  'category:slug',
     ]);
-
     // product
     Route::resource('products', ProductController::class)->parameters([
         'products' =>  'product:slug',
     ]);
-
     // product images
     Route::resource('product-images', ProductImageController::class);
+
+    // checkout
     
 });
+Route::get('cart', [CheckoutController::class, 'cart']);
+Route::get('add-to-cart/{id}', [CheckoutController::class, 'add_to_cart'])->name('add.to.cart');
+Route::get('remove/{id}', [CheckoutController::class, 'remove'])->name('remove');
+Route::post('quantity-update/{id}', [CheckoutController::class, 'quantity'])->name('quantity.update');
+Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+
 
 // require __DIR__.'/auth.php';
 
