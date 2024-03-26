@@ -59,7 +59,8 @@ Route::get('add-to-cart/{id}', [CheckoutController::class, 'add_to_cart'])->name
 Route::get('remove/{id}', [CheckoutController::class, 'remove'])->name('remove');
 Route::post('quantity-update/{id}', [CheckoutController::class, 'quantity'])->name('quantity.update');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-
+Route::get('customer-address', [CheckoutController::class, 'customer_address'])->name('customer.address');
+Route::get('place-order', [CheckoutController::class, 'place_order'])->name('place.order');
 
 // require __DIR__.'/auth.php';
 
