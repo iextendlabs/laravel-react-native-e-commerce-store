@@ -17,10 +17,9 @@ class CheckoutController extends Controller
         return view('checkout.cart');
     }
 
-    public function add_to_cart(string $id, )
+    public function add_to_cart(string $id)
     {
         $product = Product::find($id);
-
         $cart = session()->get('cart', []);
 
         if (isset($cart[$id])) {
@@ -31,6 +30,13 @@ class CheckoutController extends Controller
             $cart[$id] = $cartItem;
         }
 
+        $total = 0;
+        foreach ($cart as $item) {
+            if (isset($item['price'])) {
+                $total += $item['quantity'] * $item['price'];
+            }
+        }
+        session()->put('cart_total', $total);
         session()->put('cart', $cart);
 
         return redirect()->back();
@@ -52,53 +58,57 @@ class CheckoutController extends Controller
         }
     }
 
-    public function quantity(Request $request , string $id)
+    public function quantity(Request $request, string $id)
     {
         $cartItems = session('cart', []);
-        
+
         if (isset($cartItems[$id])) {
             $cartItems[$id]['quantity'] = $request->quantity;
         }
         session()->put('cart', $cartItems);
         return back();
-        
     }
 
     public function checkout(Request $request)
     {
-        $address = CustomerAddress::all();
+        if (auth()->user()) {
+            $address = CustomerAddress::all();
         return view('checkout.checkout', compact('address'));
-    }
-
-    public function customer_address(Request $request)
-    {
-        $data['user_id'] = 1;
-        CustomerAddress::create($data);
+        }
         return back();
-        // dd($request->all());
     }
 
     public function place_order(Request $request)
     {
+        // dd($request->all());
         $cartItems = session('cart', []);
         $subtotal = 0;
         $discount = 0;
+
+        if ($request->country) {
+            $data  = $request->all();
+            $data['user_id'] = Auth::id();
+            $address =  CustomerAddress::create($data);
+        }
         $order = Order::create([
-            'user_id' => 1,
-            'customer_address_id' => $request->address
+            'user_id' => Auth::id(),
+            'customer_address_id' => $address ? $address->id : $request->address
         ]);
+        // $product = Product::find();
+            
+        // dd($product);
 
         foreach ($cartItems as $key => $value) {
             $subtotal += $value['price'] * $value['quantity'];
             $total = $discount + $subtotal;
 
             $order_product = OrderProduct::create([
-            'name' => $value['name'],
-            'price' => $value['price'],
-            'quantity' => $value['quantity'],
-            'product_id' => $value['id'],
-            'total' => $value['price'] * $value['quantity'],
-            'order_id' => $order->id
+                'name' => $value['name'],
+                'price' => $value['price'],
+                'quantity' => $value['quantity'],
+                'product_id' => $value['id'],
+                'total' => $value['price'] * $value['quantity'],
+                // 'order_id' => $order->id
             ]);
         }
 
@@ -106,9 +116,9 @@ class CheckoutController extends Controller
             'total' => $total,
             'subtotal' => $subtotal,
             'discount' => $discount,
-            'order_id' => $order->id
+            // 'order_id' => $order->id
         ]);
         session()->forget('cart');
-        return back();
+        return redirect()->route('/');
     }
 }

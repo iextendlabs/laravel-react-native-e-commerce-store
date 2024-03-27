@@ -51,7 +51,7 @@
                         style="display: block;">Add New
                         Address</button>
                     @include('../include/error')
-                    <form id="addressForm" style="display: none;" action="{{ route('customer.address') }}"
+                    <form id="addressForm" style="display: none;" action="{{ route('place.order') }}"
                         class="lg:mt-12">
                         @csrf
                         <div>
@@ -135,7 +135,7 @@
                                 class="min-w-[150px] px-6 py-3.5 text-sm bg-gray-100 text-[#333] rounded-md hover:bg-gray-200">Back</a>
                             <button type="submit"
                                 class="min-w-[150px] px-6 py-3.5 text-sm  bg-red-200 rounded-md hover:bg-[#111]">Confirm
-                                payment $240</button>
+                                Place Order</button>
                         </div>
                     </form>
                 </div>

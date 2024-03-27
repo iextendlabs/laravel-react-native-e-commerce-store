@@ -32,10 +32,17 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [AuthController::class, 'store_register']);
     Route::get('login', [AuthController::class, 'login'])->name('login');
     Route::post('login', [AuthController::class, 'store_login']);
+    // checkout
 });
+Route::get('cart', [CheckoutController::class, 'cart']);
+Route::get('add-to-cart/{id}', [CheckoutController::class, 'add_to_cart'])->name('add.to.cart');
+Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::post('quantity-update/{id}', [CheckoutController::class, 'quantity'])->name('quantity.update');
+Route::get('place-order', [CheckoutController::class, 'place_order'])->name('place.order');
+Route::get('remove/{id}', [CheckoutController::class, 'remove'])->name('remove');
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {    
     Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('dashboard', [AuthController::class, 'dashboard']);
     Route::get('logout', [AuthController::class, 'destroy']);
@@ -50,17 +57,7 @@ Route::middleware('auth')->group(function () {
     ]);
     // product images
     Route::resource('product-images', ProductImageController::class);
-
-    // checkout
-    
 });
-Route::get('cart', [CheckoutController::class, 'cart']);
-Route::get('add-to-cart/{id}', [CheckoutController::class, 'add_to_cart'])->name('add.to.cart');
-Route::get('remove/{id}', [CheckoutController::class, 'remove'])->name('remove');
-Route::post('quantity-update/{id}', [CheckoutController::class, 'quantity'])->name('quantity.update');
-Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-Route::get('customer-address', [CheckoutController::class, 'customer_address'])->name('customer.address');
-Route::get('place-order', [CheckoutController::class, 'place_order'])->name('place.order');
 
 // require __DIR__.'/auth.php';
 

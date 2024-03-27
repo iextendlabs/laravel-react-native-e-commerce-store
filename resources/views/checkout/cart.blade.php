@@ -4,7 +4,7 @@
             <div class="w-3/4 bg-white px-10 py-10">
                 <div class="flex justify-between border-b pb-8">
                     <h1 class="font-semibold text-2xl">Shopping Cart</h1>
-                    <h2 class="font-semibold text-2xl">{{ count(session('cart') ?? [])}} Items</h2>
+                    <h2 class="font-semibold text-2xl">{{ count(session('cart') ?? []) }} Items</h2>
                 </div>
                 <div class="flex mt-10 mb-5">
                     <h3 class="font-semibold text-gray-600 text-xs uppercase w-2/5">Product Details</h3>
@@ -15,9 +15,6 @@
                 @php
                     $cart = session('cart') ?? [];
                     $total = 0;
-                    foreach ($cart as $key => $value) {
-                        $total += $value['price'] * $value['quantity'];
-                    }
                 @endphp
                 @if (is_array($cart) && count($cart) > 0)
                     @foreach ($cart as $id => $item)
@@ -27,7 +24,8 @@
                                     <img class="h-24" src="{{ $item['image'] }}" alt="">
                                 </div>
                                 <div class="flex flex-col justify-between ml-4 flex-grow">
-                                    <span class="font-bold text-sm">{{ Str::limit($item['description'], 20) }}</span>
+                                    <span
+                                        class="font-bold text-sm">{{ Str::limit($item['description'] ?? '', 20) }}</span>
                                     <span class="text-red-500 text-xs">{{ $item['name'] }}</span>
                                     <a href="{{ route('remove', $id) }}"
                                         class="font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</a>
@@ -35,16 +33,27 @@
                             </div>
                             <div class="flex justify-center w-1/5">
                                 <form action="{{ route('quantity.update', ['id' => $id]) }}" method="POST">
-                                  @csrf
-                                  <input class="mx-2 border text-center w-8" type="text"
-                                  value="{{ $item['quantity'] }}" name="quantity">
-                                  <button>update</button>
+                                    @csrf
+                                    <input class="mx-2 border text-center w-8" type="text"
+                                        value="{{ $item['quantity'] }}" name="quantity">
+                                    <button>update</button>
                                 </form>
                             </div>
-                            <span class="text-center w-1/5 font-semibold text-sm">{{ $item['price'] }}</span>
-                            <span
-                                class="text-center w-1/5 font-semibold text-sm">{{ $item['quantity'] * $item['price'] }}</span>
+                            @if (isset($item['price']))
+                                <span class="text-center w-1/5 font-semibold text-sm">{{ $item['price'] }}</span>
+                                <span
+                                    class="text-center w-1/5 font-semibold text-sm">{{ $item['quantity'] * $item['price'] }}</span>
+                            @else
+                                <span class="text-center w-1/5 font-semibold text-sm">N/A</span>
+                                <span class="text-center w-1/5 font-semibold text-sm">N/A</span>
+                            @endif
                         </div>
+                        @php
+                            // Calculate total
+                            if (isset($item['price'])) {
+                                $total += $item['price'] * $item['quantity'];
+                            }
+                        @endphp
                     @endforeach
                 @endif
 
@@ -56,18 +65,20 @@
                     </svg>
                     Continue Shopping
                 </a>
-                <div class="border-t mt-8">
-                    <div class="flex font-semibold justify-between py-6 text-sm uppercase">
-                        <span>Total cost</span>
-                        <span>{{ $total }}</span>
+                @if (is_array($cart) && count($cart) > 0)
+                    <div class="border-t mt-8">
+                        <div class="flex font-semibold justify-between py-6 text-sm uppercase">
+                            <span>Total cost</span>
+                            <span>{{ $total }}</span>
+                        </div>
+                        <form action="{{ route('checkout') }}" method="GET">
+                            @csrf
+                            <button
+                                class="bg-indigo-500 font-semibold  hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
+                                Checkout</button>
+                        </form>
                     </div>
-                    <form action="{{ route('checkout') }}" method="GET">
-                      @csrf
-                      <button
-                          class="bg-indigo-500 font-semibold  hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
-                          Checkout</button>
-                    </form>
-                </div>
+                @endif
             </div>
         </div>
     </div>
