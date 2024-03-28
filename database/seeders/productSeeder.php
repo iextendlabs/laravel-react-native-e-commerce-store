@@ -28,9 +28,9 @@ class productSeeder extends Seeder
         $P1 = [
             'name' => 'Men shirt',
             'description' => $d1,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 999,
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/1.png',
             'slug'=> Str::slug($d1),
             
@@ -39,9 +39,9 @@ class productSeeder extends Seeder
         $P2 = [
             'name' => 'Formal Shirt',
             'description' => $d2,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 499,
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/2.png',
             'slug'=> Str::slug($d2),
             
@@ -50,9 +50,9 @@ class productSeeder extends Seeder
         $P3 = [
             'name' => 'Dress Shirt',
             'description' => $d3,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 1009,
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/3.png',
             'slug'=> Str::slug($d3),
             
@@ -61,9 +61,9 @@ class productSeeder extends Seeder
         $P4 = [
             'name' => 'Cotton pent',
             'description' => $d4,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 1398,
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/4.png',
             'slug'=> Str::slug($d4),
             
@@ -71,9 +71,9 @@ class productSeeder extends Seeder
         $P5 = [
             'name' => '6 pocket pent',
             'description' => $d5,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 1498,
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/5.png',
             'slug'=> Str::slug($d5),
             
@@ -82,9 +82,9 @@ class productSeeder extends Seeder
         $P6 = [
             'name' => 'Men Pure Cotton',
             'description' => $d6,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 1499,  
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/6.png',
             'slug'=> Str::slug($d6),
             
@@ -93,9 +93,9 @@ class productSeeder extends Seeder
         $P7 = [
             'name' => 'Physics Book',
             'description' => $d7,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 3199,  
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/book1.png',
             'slug'=> Str::slug($d7),
             
@@ -104,9 +104,9 @@ class productSeeder extends Seeder
         $P8 = [
             'name' => 'Chemistry Book',
             'description' => $d8,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 1075,  
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/book2.png',
             'slug'=> Str::slug($d8),
             
@@ -115,9 +115,9 @@ class productSeeder extends Seeder
         $P9 = [
             'name' => 'Car Remote',
             'description' => $d9,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 1149,  
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/7.png',
             'slug'=> Str::slug($d9),
             
@@ -126,9 +126,9 @@ class productSeeder extends Seeder
         $P10 = [
             'name' => 'Kitchen Set',
             'description' => $d10,
-            'quantity' => 1,
+            'quantity' => 10,
             'price' => 1085,  
-            'category_id' => 2,
+            'category_id' => 1,
             'image' => '/img/8.png',
             'slug'=> Str::slug($d10),
             

@@ -9,6 +9,10 @@
                     </div>
                     <h1 class="text-3xl font-extrabold text-[#333] inline-block border-b-4 border-[#333] pb-1">Address
                     </h1>
+                    <button id="toggleAddressFormBtn"
+                    class="mt-4 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                    style="display: block;">Add New
+                    Address</button>
                     <form action="{{ route('place.order') }}">
                         <div class="lg:col-span-2 max-lg:order-1 p-2 max-w-4xl mx-auto w-full flex">
 
@@ -18,8 +22,8 @@
                                     <div
                                         class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
 
-                                        <input id="bordered-radio-{{ $id }}" type="radio" value="{{ $item->id }}"
-                                            name="address" 
+                                        <input id="bordered-radio-{{ $id }}" type="radio"
+                                            value="{{ $item->id }}" name="address"
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                         <label for="bordered-radio-{{ $id }}"
                                             class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Address
@@ -38,6 +42,7 @@
                                 </div>
                             @endforeach
                         </div>
+                        
                         <div class="flex flex-wrap gap-4 mt-8 " style="display: block;" id="placeButton">
                             <a href="/cart"
                                 class="min-w-[150px] px-6 py-3.5 text-sm bg-gray-100 text-[#333] rounded-md hover:bg-gray-200">Back</a>
@@ -46,31 +51,34 @@
                                 Order</button>
                         </div>
                     </form>
-                    <button id="toggleAddressFormBtn"
-                        class="mt-4 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                        style="display: block;">Add New
-                        Address</button>
+
                     @include('../include/error')
-                    <form id="addressForm" style="display: none;" action="{{ route('place.order') }}"
-                        class="lg:mt-12">
+                    <form id="addressForm" style="display: none;" action="{{ route('place.order') }}" class="lg:mt-12">
                         @csrf
                         <div>
                             <h2 class="text-2xl font-extrabold text-[#333]">Shipping info</h2>
                             <div class="grid grid-cols-2 gap-6 mt-8">
                                 <input type="text" placeholder="Name" name="name"
                                     class="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none" />
+
                                 <input type="email" placeholder="Email address" name="email"
                                     class="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none" />
+
                                 <input type="text" placeholder="Country" name="country"
                                     class="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none" />
-                                <input type="text" placeholder="Street address" name="address"
+
+                                <input type="text" placeholder="Street" name="street"
                                     class="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none" />
+
                                 <input type="text" placeholder="City" name="city"
                                     class="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none" />
+
                                 <input type="text" placeholder="State" name="state"
                                     class="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none" />
+
                                 <input type="number" placeholder="Postal code" name="postal_code"
                                     class="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none" />
+
                                 <input type="number" placeholder="Phone" name="phone"
                                     class="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none" />
                             </div>
@@ -145,30 +153,31 @@
                             <h2 class="text-2xl font-extrabold text-[#333]">Order Summary</h2>
                             <div class="space-y-3 mt-10">
                                 @php
-                                    $cart = session('cart') ?? [];
                                     $total = 0;
                                     $discount = 0;
-                                    foreach ($cart as $key => $value) {
-                                        $total += $value['price'] * $value['quantity'];
-                                    }
                                 @endphp
-                                @foreach ($cart as $item)
+                                @foreach ($products as $item)
                                     <div class="grid sm:grid-cols-2">
                                         <div class="bg-gray-200 rounded-md w-24">
-                                            <img src='{{ $item['image'] }}' class="object-contain" />
+                                            <img src='{{ $item->image }}' class="object-contain" />
                                         </div>
                                         <div>
-                                            <h3 class="text-base text-[#333]">{{ $item['name'] ?? '' }}</h3>
+                                            <h3 class="text-base text-[#333]">{{ $item->name ?? '' }}</h3>
                                             <ul class="text-xs text-[#333] space-y-2 mt-2">
                                                 {{-- <li class="flex flex-wrap gap-4">Size <span class="ml-auto">37</span></li> --}}
                                                 <li class="flex flex-wrap gap-4">Quantity <span
-                                                        class="ml-auto">{{ $item['quantity'] }}</span></li>
+                                                        class="ml-auto">{{ $item->quantity }}</span></li>
                                                 <li class="flex flex-wrap gap-4">Total Price <span
-                                                        class="ml-auto">{{ $item['quantity'] * $item['price'] }}</span>
+                                                        class="ml-auto">{{ $item->quantity * $item->price }}</span>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
+                                    @php
+                                        if (isset($item->price)) {
+                                            $total += $item->price * $item->quantity;
+                                        }
+                                    @endphp
                                 @endforeach
 
                             </div>
@@ -188,36 +197,36 @@
         </div>
     </div>
     <script>
-      document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-          radio.addEventListener('click', function() {
-              var form = document.getElementById("addressForm");
-              var button = document.getElementById('placeButton');
-              var formButton = document.getElementById('toggleAddressFormBtn');
-              
-              form.style.display = "none";
-              button.style.display = 'block';
-              formButton.style.display = 'block';
-          });
-      });
+        document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+            radio.addEventListener('click', function() {
+                var form = document.getElementById("addressForm");
+                var button = document.getElementById('placeButton');
+                var formButton = document.getElementById('toggleAddressFormBtn');
 
-      document.getElementById('toggleAddressFormBtn').addEventListener('click', function() {
-          var form = document.getElementById("addressForm");
-          var button = document.getElementById('placeButton');
-          var formButton = document.getElementById('toggleAddressFormBtn');
+                form.style.display = "none";
+                button.style.display = 'block';
+                formButton.style.display = 'block';
+            });
+        });
 
-          if (form.style.display === "none") {
-              form.style.display = "block";
-              button.style.display = 'none';
-              formButton.style.display = 'none';
-              var radioButtons = document.querySelectorAll('input[type="radio"]');
-              radioButtons.forEach(function(button) {
-                  button.checked = false;
-              });
-          } else {
-              form.style.display = "none";
-              button.style.display = 'block';
-          }
-      });
-  </script>
+        document.getElementById('toggleAddressFormBtn').addEventListener('click', function() {
+            var form = document.getElementById("addressForm");
+            var button = document.getElementById('placeButton');
+            var formButton = document.getElementById('toggleAddressFormBtn');
+
+            if (form.style.display === "none") {
+                form.style.display = "block";
+                button.style.display = 'none';
+                formButton.style.display = 'none';
+                var radioButtons = document.querySelectorAll('input[type="radio"]');
+                radioButtons.forEach(function(button) {
+                    button.checked = false;
+                });
+            } else {
+                form.style.display = "none";
+                button.style.display = 'block';
+            }
+        });
+    </script>
 
 </x-app-layout>

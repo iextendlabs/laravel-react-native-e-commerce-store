@@ -18,6 +18,54 @@
                             href="#">About</a></li>
                     <li> <a class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
                             href="#">shop</a></li>
+                    <!-- Dropdown menu -->
+                    <div class="dropdown relative md:static">
+                        <button class="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
+                            <div class="ml-2 capitalize flex">
+                                <h1 class="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">dropdown</h1>
+                                <i class="fad fa-chevron-down ml-2 text-xs leading-none"></i>
+                            </div>
+                        </button>
+                    
+                        <button class="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
+                    
+                        <div class="text-gray-500 menu hidden md:mt-10 md:w-full rounded bg-white shadow-md absolute z-20 right-0 w-40 mt-5 py-2 animated faster" id="dropdownMenu">
+                            <!-- item -->
+                            <a class="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="#">
+                                <i class="fad fa-user-edit text-xs mr-1"></i>
+                                edit my profile
+                            </a>                
+                            <hr>
+                    
+                            <!-- item -->
+                            <a class="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out" href="logout">
+                                <i class="fad fa-user-times text-xs mr-1"></i>
+                                log out
+                            </a>
+                            <!-- end item -->
+                        </div>
+                    </div>
+                    
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            var dropdownMenu = document.getElementById("dropdownMenu");
+                            var menuBtn = document.querySelector(".menu-btn");
+                            var menuOverflow = document.querySelector(".menu-overflow");
+                    
+                            // Toggle dropdown menu visibility
+                            menuBtn.addEventListener("click", function() {
+                                dropdownMenu.classList.toggle("hidden");
+                                menuOverflow.classList.toggle("hidden");
+                            });
+                    
+                            // Close dropdown menu when clicking outside
+                            menuOverflow.addEventListener("click", function() {
+                                dropdownMenu.classList.add("hidden");
+                                menuOverflow.classList.add("hidden");
+                            });
+                        });
+                    </script>
+                    
                     {{-- <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
                             href="#">About</a></li> --}}
 
@@ -80,9 +128,29 @@
                     <circle cx="17.5" cy="18.5" r="1.5" />
                 </svg>
             </a>
+            <p class="text-red-600">{{ count(session('cart')) ?? [] }}</p>
 
 
 
         </div>
     </div>
 </nav>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var dropdownMenu = document.getElementById("dropdownMenu");
+        var menuBtn = document.querySelector(".menu-btn");
+        var menuOverflow = document.querySelector(".menu-overflow");
+
+        // Toggle dropdown menu visibility
+        menuBtn.addEventListener("click", function() {
+            dropdownMenu.classList.toggle("hidden");
+            menuOverflow.classList.toggle("hidden");
+        });
+
+        // Close dropdown menu when clicking outside
+        menuOverflow.addEventListener("click", function() {
+            dropdownMenu.classList.add("hidden");
+            menuOverflow.classList.add("hidden");
+        });
+    });
+</script>

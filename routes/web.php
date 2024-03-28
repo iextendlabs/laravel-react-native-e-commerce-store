@@ -44,7 +44,7 @@ Route::get('remove/{id}', [CheckoutController::class, 'remove'])->name('remove')
 
 Route::middleware('auth')->group(function () {    
     Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('dashboard', [AuthController::class, 'dashboard']);
+    Route::get('dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
     Route::get('logout', [AuthController::class, 'destroy']);
 
     // category

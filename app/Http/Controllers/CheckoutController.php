@@ -14,31 +14,28 @@ class CheckoutController extends Controller
 {
     public function cart()
     {
-        return view('checkout.cart');
+        $cart = session('cart', []);
+        $products = [];
+        foreach ($cart as $key => $value) {
+            $product = Product::find($key);
+            $product['quantity'] = $value['quantity'];
+            $products[] = $product;
+        }
+        return view('checkout.cart', compact('products'));
     }
 
     public function add_to_cart(string $id)
     {
-        $product = Product::find($id);
         $cart = session()->get('cart', []);
 
         if (isset($cart[$id])) {
             $cart[$id]['quantity']++;
         } else {
-            $cartItem = $product->toArray();
             $cartItem['quantity'] = 1;
             $cart[$id] = $cartItem;
         }
-
-        $total = 0;
-        foreach ($cart as $item) {
-            if (isset($item['price'])) {
-                $total += $item['quantity'] * $item['price'];
-            }
-        }
-        session()->put('cart_total', $total);
         session()->put('cart', $cart);
-
+        // dd($cart);
         return redirect()->back();
     }
 
@@ -61,9 +58,13 @@ class CheckoutController extends Controller
     public function quantity(Request $request, string $id)
     {
         $cartItems = session('cart', []);
-
-        if (isset($cartItems[$id])) {
-            $cartItems[$id]['quantity'] = $request->quantity;
+        $product = Product::find($id);
+        if ($product->quantity >= $request->quantity) {
+            if (isset($cartItems[$id])) {
+                $cartItems[$id]['quantity'] = $request->quantity;
+            }
+        } else {
+            flash()->addWarning('quantity no available');
         }
         session()->put('cart', $cartItems);
         return back();
@@ -71,54 +72,65 @@ class CheckoutController extends Controller
 
     public function checkout(Request $request)
     {
+        $cart = session('cart', []);
+        $products = [];
         if (auth()->user()) {
+            foreach ($cart as $key => $value) {
+                $product = Product::find($key);
+                $product['quantity'] = $value['quantity'];
+                $products[] = $product;
+            }
             $address = CustomerAddress::all();
-        return view('checkout.checkout', compact('address'));
+            return view('checkout.checkout', compact('address', 'products'));
         }
         return back();
     }
 
     public function place_order(Request $request)
     {
-        // dd($request->all());
         $cartItems = session('cart', []);
         $subtotal = 0;
         $discount = 0;
+        // dd($cartItems);
+        // dd($request->all());
 
         if ($request->country) {
             $data  = $request->all();
             $data['user_id'] = Auth::id();
             $address =  CustomerAddress::create($data);
         }
+
         $order = Order::create([
             'user_id' => Auth::id(),
-            'customer_address_id' => $address ? $address->id : $request->address
+            'customer_address_id' => $request->address ? $request->address : $address->id
         ]);
-        // $product = Product::find();
-            
-        // dd($product);
 
         foreach ($cartItems as $key => $value) {
-            $subtotal += $value['price'] * $value['quantity'];
+            $product = Product::find($key);
+            // dd($product->price * $value['quantity']);
+            $quantity = $product->quantity - $value['quantity'];
+            $product->quantity = $quantity;
+            $product->save();
+            $subtotal += $product->price * $value['quantity'];
             $total = $discount + $subtotal;
-
             $order_product = OrderProduct::create([
-                'name' => $value['name'],
-                'price' => $value['price'],
-                'quantity' => $value['quantity'],
-                'product_id' => $value['id'],
-                'total' => $value['price'] * $value['quantity'],
-                // 'order_id' => $order->id
+                'name' => $product->name,
+                'price' => $product->price,
+                'quantity' => $product->quantity,
+                'product_id' => $product->id,
+                'total' => $product->price * $value['quantity'],
+                'order_id' => $order->id
             ]);
         }
+        // dd($total);
 
         $order_total = OrderTotal::create([
             'total' => $total,
             'subtotal' => $subtotal,
             'discount' => $discount,
-            // 'order_id' => $order->id
+            'order_id' => $order->id
         ]);
         session()->forget('cart');
-        return redirect()->route('/');
+        return to_route('dashboard');
     }
 }

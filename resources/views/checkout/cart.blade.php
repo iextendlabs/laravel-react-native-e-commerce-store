@@ -13,36 +13,35 @@
                     <h3 class="font-semibold  text-gray-600 text-xs uppercase w-1/5 text-center">Total</h3>
                 </div>
                 @php
-                    $cart = session('cart') ?? [];
                     $total = 0;
                 @endphp
-                @if (is_array($cart) && count($cart) > 0)
-                    @foreach ($cart as $id => $item)
+                @if (is_array($products) && count($products) > 0)
+                    @foreach ($products as $item)
                         <div class="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
                             <div class="flex w-2/5"> <!-- product -->
                                 <div class="w-20">
-                                    <img class="h-24" src="{{ $item['image'] }}" alt="">
+                                    <img class="h-24" src="{{ $item->image }}" alt="">
                                 </div>
                                 <div class="flex flex-col justify-between ml-4 flex-grow">
                                     <span
-                                        class="font-bold text-sm">{{ Str::limit($item['description'] ?? '', 20) }}</span>
-                                    <span class="text-red-500 text-xs">{{ $item['name'] }}</span>
-                                    <a href="{{ route('remove', $id) }}"
+                                        class="font-bold text-sm">{{ Str::limit($item->description ?? '', 20) }}</span>
+                                    <span class="text-red-500 text-xs">{{ $item->name }}</span>
+                                    <a href="{{ route('remove', $item->id) }}"
                                         class="font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</a>
                                 </div>
                             </div>
                             <div class="flex justify-center w-1/5">
-                                <form action="{{ route('quantity.update', ['id' => $id]) }}" method="POST">
+                                <form action="{{ route('quantity.update', ['id' => $item->id]) }}" method="POST">
                                     @csrf
                                     <input class="mx-2 border text-center w-8" type="text"
-                                        value="{{ $item['quantity'] }}" name="quantity">
+                                        value="{{ $item->quantity }}" name="quantity">
                                     <button>update</button>
                                 </form>
                             </div>
-                            @if (isset($item['price']))
-                                <span class="text-center w-1/5 font-semibold text-sm">{{ $item['price'] }}</span>
+                            @if (isset($item->price))
+                                <span class="text-center w-1/5 font-semibold text-sm">{{ $item->price }}</span>
                                 <span
-                                    class="text-center w-1/5 font-semibold text-sm">{{ $item['quantity'] * $item['price'] }}</span>
+                                    class="text-center w-1/5 font-semibold text-sm">{{ $item->quantity * $item->price }}</span>
                             @else
                                 <span class="text-center w-1/5 font-semibold text-sm">N/A</span>
                                 <span class="text-center w-1/5 font-semibold text-sm">N/A</span>
@@ -50,8 +49,8 @@
                         </div>
                         @php
                             // Calculate total
-                            if (isset($item['price'])) {
-                                $total += $item['price'] * $item['quantity'];
+                            if (isset($item->price)) {
+                                $total += $item->price * $item->quantity;
                             }
                         @endphp
                     @endforeach
@@ -65,7 +64,7 @@
                     </svg>
                     Continue Shopping
                 </a>
-                @if (is_array($cart) && count($cart) > 0)
+                @if (is_array($products) && count($products) > 0 ) 
                     <div class="border-t mt-8">
                         <div class="flex font-semibold justify-between py-6 text-sm uppercase">
                             <span>Total cost</span>
