@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProfileController;
@@ -57,6 +58,14 @@ Route::middleware('auth')->group(function () {
     ]);
     // product images
     Route::resource('product-images', ProductImageController::class);
+    
+    // order
+    Route::get('orders', [OrderController::class, 'index'])->name('orders');
+    Route::get('orders-edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
+    Route::post('orders-update/{id}', [OrderController::class, 'update'])->name('order.update');
+    Route::delete('orders-destroy/{id}', [OrderController::class, 'destroy'])->name('order.destroy');
+    Route::get('my-order', [CheckoutController::class, 'my_orders']);
+    Route::get('order-detail/{id}', [CheckoutController::class, 'order_detail'])->name('order.detail');
 });
 
 // require __DIR__.'/auth.php';

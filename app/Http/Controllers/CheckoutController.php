@@ -116,7 +116,7 @@ class CheckoutController extends Controller
             $order_product = OrderProduct::create([
                 'name' => $product->name,
                 'price' => $product->price,
-                'quantity' => $product->quantity,
+                'quantity' => $value['quantity'],
                 'product_id' => $product->id,
                 'total' => $product->price * $value['quantity'],
                 'order_id' => $order->id
@@ -132,5 +132,20 @@ class CheckoutController extends Controller
         ]);
         session()->forget('cart');
         return to_route('dashboard');
+    }
+
+    public function my_orders()
+    {
+        $orders = Order::where('user_id', auth()->id())->get();
+        // dd($orders->order_products->name);
+        return view('checkout.my_order', compact('orders'));
+    }
+
+    public function order_detail(string $id)
+    {
+        $orderProduct = OrderProduct::where('order_id', $id)->latest()->get();
+        $orders = Order::find($id);
+        // dd($orders);   
+        return view('checkout.order_detail', compact('orderProduct', 'orders'));
     }
 }

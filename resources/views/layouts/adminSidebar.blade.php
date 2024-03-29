@@ -16,7 +16,6 @@
 
         <p class="uppercase text-xs text-gray-600 mb-4 tracking-wider">homes</p>
 
-
         <!-- link -->
         <a href="admin"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
@@ -48,23 +47,22 @@
             Products
         </a>
 
+
         <a href="/product-images"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
 
             <i class="fad fa-solid fa-shapes"></i>
             Products Image
         </a>
-        <!-- end link -->
-
-
-        <p class="uppercase text-xs text-gray-600 mb-4 mt-4 tracking-wider">UI Elements</p>
 
         <!-- link -->
-        <a href="./typography.html"
+        <a href="{{ route('orders') }}"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-            <i class="fad fa-text text-xs mr-2"></i>
-            typography
+
+            <i class="fad fa-solid fa-shapes"></i>
+            Orders
         </a>
+        <p class="uppercase text-xs text-gray-600 mb-4 mt-4 tracking-wider">UI Elements</p>
         <!-- end link -->
 
         <!-- link -->
