@@ -39,6 +39,30 @@ class CheckoutController extends Controller
         return redirect()->back();
     }
 
+    public function buy_now(string $id)
+    {
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity']++;
+        } else {
+            $cartItem['quantity'] = 1;
+            $cart[$id] = $cartItem;
+        }
+        session()->put('cart', $cart);
+        $products = [];
+        if (auth()->user()) {
+            foreach ($cart as $key => $value) {
+                $product = Product::find($key);
+                $product['quantity'] = $value['quantity'];
+                $products[] = $product;
+            }
+            $address = CustomerAddress::all();
+            return view('checkout.checkout', compact('address', 'products'));
+        }
+        return back();
+    }
+
     public function remove(string $id)
     {
         $cartItems = session('cart', []);

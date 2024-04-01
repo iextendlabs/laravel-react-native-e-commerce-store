@@ -885,22 +885,6 @@
 
 <body class="antialiased">
 
-    {{-- <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-        <h1>Home page</h1>
-            @if (Route::has('login'))
-                <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-        </div> --}}
     @include('layouts/mainNavigation')
 
     <div class="carousel relative container mx-auto" style="max-width:1600px;">
@@ -1022,6 +1006,48 @@
 
                     <a class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
                         href="#">
+                        Categories
+                    </a>
+
+                    <div class="flex items-center" id="store-nav-content">
+
+                        <a class="pl-3 inline-block no-underline hover:text-black" href="#">
+                            <svg class="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M7 11H17V13H7zM4 7H20V9H4zM10 15H14V17H10z" />
+                            </svg>
+                        </a>
+
+                        <a class="pl-3 inline-block no-underline hover:text-black" href="#">
+                            <svg class="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24" viewBox="0 0 24 24">
+                                <path
+                                    d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z" />
+                            </svg>
+                        </a>
+
+                    </div>
+                </div>
+            </nav>
+            @foreach ($category as $item)
+                <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+                    <a href="{{ route('category', $item->id) }}">
+                        <p class="border-2 rounded py-4 text-center ">{{ $item->name }}</p>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    <section class="bg-white py-8">
+
+        <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+
+            <nav id="store" class="w-full z-30 top-0 px-6 py-1">
+                <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
+
+                    <a class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
+                        href="#">
                         Store
                     </a>
 
@@ -1047,7 +1073,7 @@
             </nav>
             @foreach ($product as $item)
                 <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                    <a href="#">
+                    <a href="{{ route('product.detail', ['product' => $item->id]) }}">
                         <img class="hover:grow hover:shadow-lg" src="{{ $item->image }}">
                         <div class="pt-3 flex items-center justify-between">
                             <p class="">{{ $item->name }}</p>

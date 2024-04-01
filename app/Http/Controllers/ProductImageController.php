@@ -38,8 +38,8 @@ class ProductImageController extends Controller
             'product_id' => 'required'
         ]);
         $data = $request->all();
-        $product = Product::find($request->product_id)->value('slug');
-        $image = $this->saveFile($request, 'ProductImages', $product);
+        $product = Product::find($request->product_id);
+        $image = $this->saveFile($request, 'ProductImages', $product->slug);
         if ($image) $data['image'] = $image;
         ProductImage::create($data);
         return to_route('product-images.index');
@@ -73,8 +73,8 @@ class ProductImageController extends Controller
         ]);
 
         if ($request->image) {
-            $imagePath = 'storage/products/' . $productImage->image;
-            $thumbPath = 'storage/products/thumb/' . $productImage->image;
+            $imagePath = 'storage/ProductImages/' . $productImage->image;
+            $thumbPath = 'storage/ProductImages/thumb/' . $productImage->image;
             if (file_exists($imagePath) && file_exists($imagePath)) {
                 unlink($imagePath);
                 unlink($thumbPath);
@@ -94,8 +94,8 @@ class ProductImageController extends Controller
      */
     public function destroy(ProductImage $productImage)
     {
-        $imagePath = 'storage/products/' . $productImage->image;
-        $thumbPath = 'storage/products/thumb/' . $productImage->image;
+        $imagePath = 'storage/ProductImages/' . $productImage->image;
+        $thumbPath = 'storage/ProductImages/thumb/' . $productImage->image;
         if (file_exists($imagePath) && file_exists($imagePath)) {
             unlink($imagePath);
             unlink($thumbPath);
