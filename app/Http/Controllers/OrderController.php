@@ -12,11 +12,18 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orderProduct = OrderProduct::all();
+        $query = Order::query()
+        ->when($request->status, fn($query) => $query->where('status', $request->status))
+        ->when($request->date, fn($query) => $query->whereDate('created_at', $request->date))
+        ->when($request->name)->whereHas('user', fn($query) => $query->where('name', $request->name));
+
+        $orderProduct = $query->simplePaginate(10);
         return view('order.index', compact('orderProduct'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -64,7 +71,7 @@ class OrderController extends Controller
         $orderProduct->order->save();
         return to_route('orders');
     }
-     
+
 
     /**
      * Remove the specified resource from storage.
