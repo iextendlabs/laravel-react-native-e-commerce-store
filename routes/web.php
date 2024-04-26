@@ -8,9 +8,11 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Models\ProductImage;
 use Illuminate\Support\Facades\Route;
 
@@ -35,7 +37,7 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'store_login']);
 });
 
-Route::middleware('auth')->group(function () {    
+Route::middleware('auth')->group(function () {
     Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
     Route::get('logout', [AuthController::class, 'destroy']);
@@ -50,17 +52,37 @@ Route::middleware('auth')->group(function () {
     ]);
     // product images
     Route::resource('product-images', ProductImageController::class);
-    
+
+   // Customer
+   Route::resource('customers', CustomerController::class);
+   Route::get('your_profile', [CustomerController::class, 'customer_profile'])->name('your.profile');
+   Route::get('your-profile-edit', [CustomerController::class, 'customer_profile_edit']);
+   Route::put('your-profile-update/{id}', [CustomerController::class, 'customer_profile_update'])->name('your.profile.update');   Route::post('customers/{user}/roles', [CustomerController::class, 'assignRole'])->name('customers.role');
+   Route::delete('customers/{user}roles/{role}/', [CustomerController::class, 'removeRole'])->name('customers.role.remove');
+   Route::post('customers/{user}/permissions', [CustomerController::class, 'givePermission'])->name('customers.permissions');
+   Route::delete('customers/{user}/permissions/{permission}', [CustomerController::class, 'revokePermission'])->name('customers.permissions.revoke');
+
+
+
+    // role
+    Route::resource('roles', RoleController::class);
+
+    // permission
+    Route::resource('permissions', PermissionController::class);
+
     // order
     Route::get('orders', [OrderController::class, 'index'])->name('orders');
     Route::get('orders-edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
     Route::post('orders-update/{id}', [OrderController::class, 'update'])->name('order.update');
     Route::delete('orders-destroy/{id}', [OrderController::class, 'destroy'])->name('order.destroy');
+    Route::get('admin/order-detail/{id}', [OrderController::class, 'order_detail'])->name('admin.order.detail');
+
     Route::get('my-order', [CheckoutController::class, 'my_orders']);
     Route::get('order-detail/{id}', [CheckoutController::class, 'order_detail'])->name('order.detail');
 });
+ 
 
- // checkout
+// checkout
 Route::get('cart', [CheckoutController::class, 'cart']);
 Route::get('add-to-cart/{id}', [CheckoutController::class, 'add_to_cart'])->name('add.to.cart');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');

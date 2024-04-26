@@ -25,9 +25,8 @@
         <!-- end link -->
 
         <p class="uppercase text-xs text-gray-600 mb-4 mt-4 tracking-wider">apps</p>
-
         <!-- link -->
-        <a href=""
+        <a href="/customers"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
             <i class="fad fa-regular fa-user"></i>
             Customer
@@ -62,26 +61,24 @@
             <i class="fad fa-solid fa-shapes"></i>
             Orders
         </a>
+
+        <!-- link -->
+        <a href="/roles"
+            class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+            <i class="fad fa-regular fa-user"></i>
+            Roles
+        </a>
+        <!-- end link -->
+
+        <!-- link -->
+        <a href="/permissions"
+            class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+            <i class="fad fa-regular fa-user"></i>
+            Permission
+        </a>
+        <!-- end link -->
+
         <p class="uppercase text-xs text-gray-600 mb-4 mt-4 tracking-wider">UI Elements</p>
-        <!-- end link -->
-
-        <!-- link -->
-        <a href="./alert.html"
-            class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-            <i class="fad fa-whistle text-xs mr-2"></i>
-            alerts
-        </a>
-        <!-- end link -->
-
-
-        <!-- link -->
-        <a href="./buttons.html"
-            class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-            <i class="fad fa-cricket text-xs mr-2"></i>
-            buttons
-        </a>
-        <!-- end link -->
-
         <!-- link -->
         <a href="#"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">

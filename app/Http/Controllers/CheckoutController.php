@@ -115,15 +115,14 @@ class CheckoutController extends Controller
         $cartItems = session('cart', []);
         $subtotal = 0;
         $discount = 0;
-        // dd($cartItems);
-        // dd($request->all());
 
         if ($request->country) {
             $data  = $request->all();
             $data['user_id'] = Auth::id();
             $address =  CustomerAddress::create($data);
         }
-
+        
+        
         $order = Order::create([
             'user_id' => Auth::id(),
             'customer_address_id' => $request->address ? $request->address : $address->id
@@ -131,7 +130,6 @@ class CheckoutController extends Controller
 
         foreach ($cartItems as $key => $value) {
             $product = Product::find($key);
-            // dd($product->price * $value['quantity']);
             $quantity = $product->quantity - $value['quantity'];
             $product->quantity = $quantity;
             $product->save();
@@ -146,7 +144,6 @@ class CheckoutController extends Controller
                 'order_id' => $order->id
             ]);
         }
-        // dd($total);
 
         $order_total = OrderTotal::create([
             'total' => $total,
@@ -161,15 +158,13 @@ class CheckoutController extends Controller
     public function my_orders()
     {
         $orders = Order::where('user_id', auth()->id())->get();
-        // dd($orders->order_products->name);
         return view('checkout.my_order', compact('orders'));
     }
 
     public function order_detail(string $id)
     {
         $orderProduct = OrderProduct::where('order_id', $id)->latest()->get();
-        $orders = Order::find($id);
-        // dd($orders);   
+        $orders = Order::find($id);;   
         return view('checkout.order_detail', compact('orderProduct', 'orders'));
     }
 }
