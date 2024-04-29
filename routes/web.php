@@ -57,6 +57,8 @@ Route::middleware('auth')->group(function () {
    Route::resource('customers', CustomerController::class);
    Route::get('your_profile', [CustomerController::class, 'customer_profile'])->name('your.profile');
    Route::get('your-profile-edit', [CustomerController::class, 'customer_profile_edit']);
+   Route::get('customer-address/{id}', [CustomerController::class, 'customer_address_edit'])->name('customer.address');
+   Route::put('customer-address-update/{id}', [CustomerController::class, 'customer_address_update'])->name('customer.address.update');
    Route::put('your-profile-update/{id}', [CustomerController::class, 'customer_profile_update'])->name('your.profile.update');   Route::post('customers/{user}/roles', [CustomerController::class, 'assignRole'])->name('customers.role');
    Route::delete('customers/{user}roles/{role}/', [CustomerController::class, 'removeRole'])->name('customers.role.remove');
    Route::post('customers/{user}/permissions', [CustomerController::class, 'givePermission'])->name('customers.permissions');

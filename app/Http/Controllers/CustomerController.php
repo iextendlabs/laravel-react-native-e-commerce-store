@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
+use App\Models\CustomerAddress;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +15,18 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $customer = User::all();
-        return view('customer.index', compact('customer'));
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'asc');
+        $query = User::query();
+        $query->when($request->name, fn ($query) => $query->where('name', $request->name));
+        $query->when($request->email, fn ($query) => $query->where('email', $request->email));
+        $query->when($request->role)->whereHas('roles', fn ($query) => $query->where('name', $request->role));
+        $query->orderBy($sort, $direction);
+        $customer = $query->simplePaginate(10);
+        $role = Role::all();
+        return view('customer.index', compact('customer', 'role', 'direction'));
     }
 
     /**
@@ -43,7 +52,7 @@ class CustomerController extends Controller
      */
     public function show(string $id)
     {
-        $customer = User::find($id); 
+        $customer = User::find($id);
         $role = Role::all();
         $permission = Permission::all();
         return view('customer.role', compact('customer', 'role', 'permission'));
@@ -81,7 +90,9 @@ class CustomerController extends Controller
 
     public function customer_profile()
     {
-        return view('customer.profile');
+        $user = Auth::user();
+        $customerAddress = CustomerAddress::where('user_id', $user->id)->get();
+        return view('customer.profile', compact('customerAddress'));
     }
 
     public function customer_profile_edit()
@@ -91,13 +102,30 @@ class CustomerController extends Controller
         return view('customer.profile_edit', compact('customer'));
     }
 
+    public function customer_address_edit(string $id)
+    {
+        $customerAddress = CustomerAddress::find($id);
+        return view('customer.address', compact('customerAddress'));
+    }
+
+    public function customer_address_update(Request $request, string $id)
+    {
+        $data = $request->all();
+        $customerAddress = CustomerAddress::find($id);
+        $customerAddress->update($data);
+        return to_route('your.profile');
+    }
+
+
+
+
+    // admin side
     public function customer_profile_update(CustomerRequest $request, string $id)
     {
         $data = $request->only('first_name', 'last_name');
         $user = User::find($id);
         $user->update($data);
         return to_route('your.profile');
-
     }
     public function assignRole(Request $request, User $user)
     {
@@ -107,7 +135,6 @@ class CustomerController extends Controller
 
         $user->assignRole($request->role);
         return back()->with('message', 'role assign');
-
     }
 
     public function removeRole(User $user, Role $role)
@@ -129,7 +156,6 @@ class CustomerController extends Controller
 
         $user->givePermissionTo($request->permission);
         return back()->with('message', 'Permission add');
-
     }
 
     public function revokePermission(User $user, Permission $permission)

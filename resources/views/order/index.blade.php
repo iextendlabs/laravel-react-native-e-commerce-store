@@ -60,15 +60,30 @@
                         <thead class="border-b border-2 border-neutral-200 font-medium dark:border-white/10">
                             <tr>
                                 <th>
-                                    <a class="ml-4" href="{{ route('orders', array_merge(request()->query(), ['sort' => 'id', 'direction' => request('direction', 'asc') == 'asc' ? 'desc' : 'asc'])) }}">Id</a>
-                                    <i class="fas {{ $direction === 'asc' ? 'fa-arrow-down' : 'fa-arrow-up' }}"></i>
+                                    <a class="ml-4"
+                                        href="{{ route('orders', array_merge(request()->query(), ['sort' => 'id', 'direction' => request('direction', 'asc') == 'asc' ? 'desc' : 'asc'])) }}">Id</a>
+                                    @if (request('sort') == 'id')
+                                        <i
+                                            class="fas {{ $direction === 'asc' ? 'fa-arrow-down' : 'fa-arrow-up' }}"></i>
+                                    @endif
                                 </th>
                                 <th scope="col" class="px-6 py-4">Customer Name</th>
-                                <th scope="col" class="px-6 py-4">Status</th>
+                                <th>
+                                    <a class="ml-10"
+                                        href="{{ route('orders', array_merge(request()->query(), ['sort' => 'status', 'direction' => request('direction', 'asc') == 'asc' ? 'desc' : 'asc'])) }}">Status</a>
+                                    @if (request('sort') == 'status')
+                                        <i
+                                            class="fas {{ $direction === 'asc' ? 'fa-arrow-down' : 'fa-arrow-up' }}"></i>
+                                    @endif
+                                </th>
                                 <th scope="col" class="px-6 py-4">Total</th>
                                 <th>
-                                    <a class="ml-10" href="{{ route('orders', array_merge(request()->query(), ['sort' => 'created_at', 'direction' => request('direction', 'asc') == 'asc' ? 'desc' : 'asc'])) }}">Date</a>
-                                    <i class="fas {{ $direction === 'asc' ? 'fa-arrow-down' : 'fa-arrow-up' }}"></i>
+                                    <a class="ml-10"
+                                        href="{{ route('orders', array_merge(request()->query(), ['sort' => 'created_at', 'direction' => request('direction', 'asc') == 'asc' ? 'desc' : 'asc'])) }}">Date</a>
+                                    @if (request('sort') == 'created_at')
+                                        <i
+                                            class="fas {{ $direction === 'asc' ? 'fa-arrow-down' : 'fa-arrow-up' }}"></i>
+                                    @endif
                                 </th>
                                 <th scope="col" class="px-6 py-4">Action</th>
                             </tr>
