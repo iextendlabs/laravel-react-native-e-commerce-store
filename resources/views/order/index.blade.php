@@ -96,7 +96,7 @@
                                         <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $item->user->name }}
                                         </td>
                                         <td class="whitespace-nowrap px-6 py-4">{{ $item->status }}</td>
-                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->order_total->total }}</td>
+                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->order_total->total ?? 0 }}</td>
                                         <td class="whitespace-nowrap px-6 py-4">{{ $item->created_at }}</td>
                                         <td class="whitespace-nowrap px-6 py-4 flex">
                                             <a href="{{ route('order.edit', $item->id) }}"

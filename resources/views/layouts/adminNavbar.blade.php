@@ -58,7 +58,7 @@ class="md:fixed md:w-full md:top-0 md:z-20 flex flex-row flex-wrap items-center 
 
                 <!-- item -->
                 <a class="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out"
-                    href="#">
+                    href="{{ route('admin.profile') }}">
                     <i class="fad fa-user-edit text-xs mr-1"></i>
                     edit my profile
                 </a>                
@@ -79,10 +79,10 @@ class="md:fixed md:w-full md:top-0 md:z-20 flex flex-row flex-wrap items-center 
         <!-- notifcation -->
         <div class="dropdown relative mr-5 md:static">
 
-            <button
+            {{-- <button
                 class="text-gray-500 menu-btn p-0 m-0 hover:text-gray-900 focus:text-gray-900 focus:outline-none transition-all ease-in-out duration-300">
                 <i class="fad fa-bells"></i>
-            </button>
+            </button> --}}
 
             <button class="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
 
@@ -206,11 +206,11 @@ class="md:fixed md:w-full md:top-0 md:z-20 flex flex-row flex-wrap items-center 
 
         <!-- messages -->
         <div class="dropdown relative mr-5 md:static">
-
+{{-- 
             <button
                 class="text-gray-500 menu-btn p-0 m-0 hover:text-gray-900 focus:text-gray-900 focus:outline-none transition-all ease-in-out duration-300">
                 <i class="fad fa-comments"></i>
-            </button>
+            </button> --}}
 
             <button class="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
 

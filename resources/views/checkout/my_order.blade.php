@@ -20,7 +20,7 @@
                                     <div class="col-span-5 lg:col-span-1 flex items-center max-lg:mt-3">
                                         <div class="flex gap-3 lg:block">
                                             <p class="font-medium text-sm leading-7 text-black">price</p>
-                                            <p class="lg:mt-4 font-medium text-sm leading-7 text-indigo-600">Rs: {{ $item->order_total->total }}</p>
+                                            <p class="lg:mt-4 font-medium text-sm leading-7 text-indigo-600">Rs: {{ $item->order_total->total ?? 0 }}</p>
                                         </div>
                                     </div>
                                     <div class="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3 ">

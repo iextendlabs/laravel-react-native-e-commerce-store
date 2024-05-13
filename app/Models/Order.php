@@ -30,4 +30,10 @@ class Order extends Model
     {
         return $this->hasOne(OrderTotal::class);
     }
+
+    public function coupon_history()
+    {
+        return $this->hasOne(CouponHistory::class);
+    }
+    
 }

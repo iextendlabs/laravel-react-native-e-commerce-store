@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="container mx-auto mt-10">
+    <div class="ml-24 mx-auto mt-10">
         <div class="flex shadow-md my-10">
             <div class="w-3/4 bg-white px-10 py-10">
                 <div class="flex justify-between border-b pb-8">
@@ -14,6 +14,7 @@
                 </div>
                 @php
                     $total = 0;
+                    $subtotal = 0
                 @endphp
                 @if (is_array($products) && count($products) > 0)
                     @foreach ($products as $item)
@@ -50,32 +51,64 @@
                         @php
                             // Calculate total
                             if (isset($item->price)) {
+                                $subtotal += $item->price * $item->quantity;
                                 $total += $item->price * $item->quantity;
                             }
                         @endphp
                     @endforeach
                 @endif
 
-                <a href="/" class="flex font-semibold text-indigo-600 text-sm mt-10">
 
-                    <svg class="fill-current mr-2 text-indigo-600 w-4" viewBox="0 0 448 512">
-                        <path
-                            d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z" />
-                    </svg>
-                    Continue Shopping
-                </a>
-                @if (is_array($products) && count($products) > 0 ) 
+                @if (is_array($products) && count($products) > 0)
                     <div class="border-t mt-8">
+                        <h1 class="mt-6 text-gray-800 font-semibold">Enter your coupon here</h1>
+                        <form action="/cart">
+                            <div class="relative mb-4 flex items-stretch mt-4">
+                                <input type="text" name="code"
+                                    class="relative m-0 -me-px block flex-auto rounded-s border border-solid border-neutral-200 bg-transparent  bg-clip-padding px-3 py-4 text-base font-normal leading-[1.6] text-surface outline-none transition duration-200 ease-in-out placeholder:text-neutral-500 focus:z-[3] focus:border-primary focus:shadow-inset focus:outline-none motion-reduce:transition-none dark:border-white/10 dark:text-white dark:placeholder:text-neutral-200 dark:autofill:shadow-autofill dark:focus:border-primary"
+                                    placeholder="Coupon code" aria-label="Recipient's username"
+                                    value="{{ request('code') }}" aria-describedby="button-addon2" />
+                                <button
+                                    class="z-[2] inline-block rounded-e border-2 border-primary-100 px-6 pb-[6px] pt-2 font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:border-primary-accent-200 hover:bg-black-600 bg-indigo-500 text-white text-lg focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 dark:border-primary-400 dark:text-primary-300 dark:hover:bg-blue-950 dark:focus:bg-blue-950"
+                                    data-twe-ripple-init type="submit" id="button-addon2">
+                                    Apply coupon
+                                </button>
+                            </div>
+                        </form>
+                        @if ($coupon_data)
+                            <div class="flex font-semibold justify-between py-6 text-sm uppercase">
+                                <span>Coupon</span>
+                                <span>-{{ $coupon_data->discount }}</span>
+                            </div>
+                        @endif
+                        <div class="flex font-semibold justify-between py-6 text-sm uppercase">
+                            <span>Subtotal</span>
+                            <span>{{ $subtotal }}</span>
+                        </div>
                         <div class="flex font-semibold justify-between py-6 text-sm uppercase">
                             <span>Total cost</span>
-                            <span>{{ $total }}</span>
+                            @if (!empty($coupon_data) && is_object($coupon_data))
+                                @if ($coupon_data->type === 'percentage')
+                                    <span>{{ $subtotal - (( $coupon_data->discount * $subtotal  ) / 100)   }}</span>
+                                @else
+                                    <span>{{ $total - $coupon_data->discount }}</span>
+                                @endif
+                            @else
+                                <span>{{ $subtotal }}</span>
+                            @endif
+
                         </div>
+                        
                         <form action="{{ route('checkout') }}" method="GET">
                             @csrf
                             <button
-                                class="bg-indigo-500 font-semibold  hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
+                                class="bg-indigo-500 font-semibold  hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full mb-6">
                                 Checkout</button>
                         </form>
+
+                        <a href="/" class="bg-indigo-500 font-semibold  hover:bg-indigo-600 py-3 text-sm text-white uppercase px-96 ml-20">
+                            Continue Shopping
+                        </a>
                     </div>
                 @endif
             </div>

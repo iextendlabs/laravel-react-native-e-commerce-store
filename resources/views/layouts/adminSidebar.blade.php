@@ -78,14 +78,14 @@
         </a>
         <!-- end link -->
 
-        <p class="uppercase text-xs text-gray-600 mb-4 mt-4 tracking-wider">UI Elements</p>
         <!-- link -->
-        <a href="#"
+        <a href="{{ route('coupons.index') }}"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
             <i class="fad fa-box-open text-xs mr-2"></i>
-            Content
+            Coupons
         </a>
         <!-- end link -->
+        <p class="uppercase text-xs text-gray-600 mb-4 mt-4 tracking-wider">UI Elements</p>
 
         <!-- link -->
         <a href="#"

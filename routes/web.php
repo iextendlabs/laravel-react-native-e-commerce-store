@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\OrderController;
@@ -39,6 +40,9 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('admin-profile', [AdminController::class, 'edit_profile'])->name('admin.profile');
+    Route::put('update-profile/{id}', [AdminController::class, 'update_profile'])->name('update.profile');
+
     Route::get('dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
     Route::get('logout', [AuthController::class, 'destroy']);
 
@@ -81,11 +85,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('my-order', [CheckoutController::class, 'my_orders']);
     Route::get('order-detail/{id}', [CheckoutController::class, 'order_detail'])->name('order.detail');
+
+    Route::resource('coupons', CouponController::class);
+    Route::get('admin/coupon-history/{id}', [CouponController::class, 'coupon_history'])->name('admin.coupon.history');
 });
  
 
 // checkout
-Route::get('cart', [CheckoutController::class, 'cart']);
+Route::get('cart', [CheckoutController::class, 'cart'])->name('cart');
 Route::get('add-to-cart/{id}', [CheckoutController::class, 'add_to_cart'])->name('add.to.cart');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('quantity-update/{id}', [CheckoutController::class, 'quantity'])->name('quantity.update');

@@ -28,14 +28,12 @@
                             fill="white" />
                     </svg>
                 </div>
-                {{-- @foreach ($orders as $item)  --}}
                 <div class="box group">
                     <p class="font-normal text-base leading-7 text-gray-500 mb-3 transition-all duration-500 group-hover:text-gray-700">Address</p>
                     <h6 class="font-semibold font-manrope text-2xl leading-9 text-black">{{ $orders->customer_address->country }}, {{ $orders->customer_address->city }}, {{ $orders->customer_address->street }}
                         
                     </h6>
                 </div>
-                {{-- @endforeach --}}
             </div>
             @foreach ($orderProduct as $item)  
            
@@ -70,6 +68,10 @@
                     <div class="flex items-center justify-between mb-6">
                         <p class="font-normal text-xl leading-8 text-gray-500">Discount</p>
                         <p class="font-semibold text-xl leading-8 text-gray-900">Rs: {{ $item->order->order_total->discount }}</p>
+                    </div>
+                    <div class="flex items-center justify-between mb-6">
+                        <p class="font-normal text-xl leading-8 text-gray-500">Coupon</p>
+                        <p class="font-semibold text-xl leading-8 text-gray-900">Rs: {{ $orders->coupon_history->discount_amount ?? 0}}</p>
                     </div>
                     <div class="flex items-center justify-between py-6 border-y border-gray-100">
                         <p class="font-manrope font-semibold text-2xl leading-9 text-gray-900">Total</p>

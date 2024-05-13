@@ -80,6 +80,11 @@
                         <p class="font-semibold text-xl leading-8 text-gray-900">Rs:
                             {{ $item->order->order_total->discount }}</p>
                     </div>
+                    <div class="flex items-center justify-between mb-6">
+                        <p class="font-normal text-xl leading-8 text-gray-500">Coupon</p>
+                        <p class="font-semibold text-xl leading-8 text-gray-900">Rs:
+                            {{ $orders->coupon_history->discount_amount }}</p>
+                    </div>
                     <div class="flex items-center justify-between py-6 border-y border-gray-100">
                         <p class="font-manrope font-semibold text-2xl leading-9 text-gray-900">Total</p>
                         <p class="font-manrope font-bold text-2xl leading-9 text-indigo-600">Rs:

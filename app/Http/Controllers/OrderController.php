@@ -17,10 +17,10 @@ class OrderController extends Controller
         $sort = $request->input('sort', 'id');
         $direction = $request->input('direction', 'asc');
         $query = Order::query()
-        ->when($request->status, fn($query) => $query->where('status', $request->status))
-        ->when($request->date, fn($query) => $query->whereDate('created_at', $request->date))
-        ->when($request->name)->whereHas('user', fn($query) => $query->where('name', $request->name))
-        ->orderBy($sort, $direction);
+            ->when($request->status, fn ($query) => $query->where('status', $request->status))
+            ->when($request->date, fn ($query) => $query->whereDate('created_at', $request->date))
+            ->when($request->name)->whereHas('user', fn ($query) => $query->where('name', $request->name))
+            ->orderBy($sort, $direction);
         $count = $query->count();
         $orderProduct = $query->simplePaginate(10);
         return view('order.index', compact('orderProduct', 'count', 'direction'));
@@ -82,16 +82,25 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         $orderProduct = OrderProduct::find($id);
-        $orderProduct->delete();
-        $orderProduct->order->delete();
-        $orderProduct->order->order_total->delete();
+        if ($orderProduct) {
+            $order = $orderProduct->order;
+            if ($order) {
+                $orderTotal = $order->order_total;
+                if ($orderTotal) {
+                    $orderTotal->delete();
+                }
+                $order->delete();
+            }
+            $orderProduct->delete();
+        }
         return to_route('orders');
     }
+
 
     public function order_detail(string $id)
     {
         $orderProduct = OrderProduct::where('order_id', $id)->latest()->get();
-        $orders = Order::find($id);;   
+        $orders = Order::find($id);;
         return view('order.order_detail', compact('orderProduct', 'orders'));
     }
 }

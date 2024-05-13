@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Trait\FileUploadTrait;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\MockObject\Rule\MethodName;
 
@@ -70,7 +71,7 @@ class ProductController extends Controller
         if ($request->image) {
             $imagePath = 'storage/products/' . $product->image;
             $thumbPath = 'storage/products/thumb/' . $product->image;
-            if (file_exists($imagePath) && file_exists($imagePath)) {
+            if (file_exists($imagePath) && file_exists($thumbPath)) {
                 unlink($imagePath);
                 unlink($thumbPath);
             }

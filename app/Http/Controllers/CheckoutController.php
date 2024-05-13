@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
+use App\Models\CouponHistory;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -12,16 +14,35 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
-    public function cart()
+    public function cart(Request $request)
     {
+        $subtotal = 0;
+        $coupon = Coupon::where('code', $request->code)->get()->first();
         $cart = session('cart', []);
+        $coupon_data = session('coupon', []);
+        if (
+            $coupon && $coupon->status === 'enable' &&
+            strtotime($coupon->start_date) <= strtotime(date('Y-m-d')) &&
+            strtotime($coupon->end_date) >= strtotime(date('Y-m-d'))
+        ) {
+            session()->put('coupon', $coupon);
+        } elseif ($request->code) {
+            session()->forget('coupon');
+            flash()->addInfo('coupon in invalid');
+        } else {
+            session()->forget('coupon');
+        }
         $products = [];
         foreach ($cart as $key => $value) {
-            $product = Product::find($key);
-            $product['quantity'] = $value['quantity'];
-            $products[] = $product;
+            if (array_key_exists($key, $cart)) {
+                $product = Product::find($key);
+                if ($product) {
+                    $product['quantity'] = $value['quantity'];
+                    $products[] = $product;
+                }
+            }
         }
-        return view('checkout.cart', compact('products'));
+        return view('checkout.cart', compact('products', 'coupon', 'coupon_data'));
     }
 
     public function add_to_cart(string $id)
@@ -35,7 +56,6 @@ class CheckoutController extends Controller
             $cart[$id] = $cartItem;
         }
         session()->put('cart', $cart);
-        // dd($cart);
         return redirect()->back();
     }
 
@@ -96,7 +116,10 @@ class CheckoutController extends Controller
 
     public function checkout(Request $request)
     {
-        $cart = session('cart', []);
+
+        $cart = session()->get('cart', []);
+        $coupon_data = session()->get('coupon', []);
+        // dd($coupon_data);
         $products = [];
         if (auth()->user()) {
             foreach ($cart as $key => $value) {
@@ -105,7 +128,7 @@ class CheckoutController extends Controller
                 $products[] = $product;
             }
             $address = CustomerAddress::all();
-            return view('checkout.checkout', compact('address', 'products'));
+            return view('checkout.checkout', compact('address', 'products', 'coupon_data'));
         }
         return back();
     }
@@ -113,7 +136,10 @@ class CheckoutController extends Controller
     public function place_order(Request $request)
     {
         $cartItems = session('cart', []);
+        $coupon = session('coupon', []);
         $subtotal = 0;
+        $total = 0;
+        $final = 0;
         $discount = 0;
 
         if ($request->country) {
@@ -121,8 +147,7 @@ class CheckoutController extends Controller
             $data['user_id'] = Auth::id();
             $address =  CustomerAddress::create($data);
         }
-        
-        
+
         $order = Order::create([
             'user_id' => Auth::id(),
             'customer_address_id' => $request->address ? $request->address : $address->id
@@ -134,7 +159,15 @@ class CheckoutController extends Controller
             $product->quantity = $quantity;
             $product->save();
             $subtotal += $product->price * $value['quantity'];
-            $total = $discount + $subtotal;
+            if ($coupon && $coupon->type === 'fixed amount') {
+                $final = $coupon->discount;
+                $total = ($subtotal + $discount) - $final;
+            } else if ($coupon && $coupon->type === 'percentage') {
+                $final = ($subtotal + $discount) * ($coupon->discount) / 100;
+                $total = ($subtotal + $discount) - $final;
+            } else {
+                $total = $subtotal + $discount;
+            }
             $order_product = OrderProduct::create([
                 'name' => $product->name,
                 'price' => $product->price,
@@ -151,6 +184,15 @@ class CheckoutController extends Controller
             'discount' => $discount,
             'order_id' => $order->id
         ]);
+        // dd($total);
+        if ($coupon) {
+            $coupon_history = CouponHistory::create([
+                'discount_amount' => $final,
+                'order_id' => $order->id,
+                'user_id' => Auth::id(),
+                'coupon_id' => $coupon->id,
+            ]);
+        }
         session()->forget('cart');
         return to_route('dashboard');
     }
@@ -164,7 +206,7 @@ class CheckoutController extends Controller
     public function order_detail(string $id)
     {
         $orderProduct = OrderProduct::where('order_id', $id)->latest()->get();
-        $orders = Order::find($id);;   
+        $orders = Order::find($id);
         return view('checkout.order_detail', compact('orderProduct', 'orders'));
     }
 }

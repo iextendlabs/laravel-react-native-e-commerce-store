@@ -88,6 +88,9 @@ class CustomerController extends Controller
         return back();
     }
 
+    /**
+     * Display a listing of the resource customer profile. 
+     */
     public function customer_profile()
     {
         $user = Auth::user();
@@ -95,6 +98,9 @@ class CustomerController extends Controller
         return view('customer.profile', compact('customerAddress'));
     }
 
+    /**
+     * Show the form for editing the specified resource for customer profile.
+     */
     public function customer_profile_edit()
     {
         $user = Auth::user();
@@ -102,12 +108,29 @@ class CustomerController extends Controller
         return view('customer.profile_edit', compact('customer'));
     }
 
+    /**
+     * Update the specified resource in storage for customer profile.
+     */
+    public function customer_profile_update(CustomerRequest $request, string $id)
+    {
+        $data = $request->only('first_name', 'last_name');
+        $user = User::find($id);
+        $user->update($data);
+        return to_route('your.profile');
+    }
+
+    /**
+     * Show the form for editing the specified resource for customer address.
+     */
     public function customer_address_edit(string $id)
     {
         $customerAddress = CustomerAddress::find($id);
         return view('customer.address', compact('customerAddress'));
     }
 
+    /**
+     * Update the specified resource in storage for customer address.
+     */
     public function customer_address_update(Request $request, string $id)
     {
         $data = $request->all();
@@ -120,13 +143,6 @@ class CustomerController extends Controller
 
 
     // admin side
-    public function customer_profile_update(CustomerRequest $request, string $id)
-    {
-        $data = $request->only('first_name', 'last_name');
-        $user = User::find($id);
-        $user->update($data);
-        return to_route('your.profile');
-    }
     public function assignRole(Request $request, User $user)
     {
         if ($user->hasRole($request->role)) {
@@ -167,4 +183,7 @@ class CustomerController extends Controller
 
         return back()->with('message', 'Permission not exists');
     }
+
+
+    //EoF
 }

@@ -10,9 +10,9 @@
                     <h1 class="text-3xl font-extrabold text-[#333] inline-block border-b-4 border-[#333] pb-1">Address
                     </h1>
                     <button id="toggleAddressFormBtn"
-                    class="mt-4 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                    style="display: block;">Add New
-                    Address</button>
+                        class="mt-4 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                        style="display: block;">Add New
+                        Address</button>
                     <form action="{{ route('place.order') }}">
                         <div class="lg:col-span-2 max-lg:order-1 p-2 max-w-4xl mx-auto w-full flex">
 
@@ -42,7 +42,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        
+
                         <div class="flex flex-wrap gap-4 mt-8 " style="display: block;" id="placeButton">
                             <a href="/cart"
                                 class="min-w-[150px] px-6 py-3.5 text-sm bg-gray-100 text-[#333] rounded-md hover:bg-gray-200">Back</a>
@@ -182,13 +182,30 @@
 
                             </div>
                         </div>
+
                         <div class="absolute left-0 bottom-0 bg-gray-200 w-full p-4">
                             <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">SubTotal <span
                                     class="ml-auto">{{ $total }}</span></h4>
                             <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Discount <span
                                     class="ml-auto">{{ $discount }}</span></h4>
-                            <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Total <span
-                                    class="ml-auto">{{ $total + $discount }}</span></h4>
+                            @if ($coupon_data)
+                                <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">
+                                    Coupon({{ $coupon_data->code }}) <span
+                                        class="ml-auto">-{{ $coupon_data->discount }}</span></h4>
+                                @if ($coupon_data->type === 'percentage')
+                                    {{-- <span></span> --}}
+                                    <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Total <span
+                                        class="ml-auto">{{ $total  - (( $coupon_data->discount * $total) / 100) }}</span></h4>
+                                @else
+                                <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Total <span
+                                    class="ml-auto">{{ $total + $discount - $coupon_data->discount }}</span></h4>
+                                @endif
+
+                            @else
+                                <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Total <span
+                                        class="ml-auto">{{ $total + $discount }}</span></h4>
+                            @endif
+                            
                         </div>
                     </div>
                 </div>
