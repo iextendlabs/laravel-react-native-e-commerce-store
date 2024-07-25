@@ -7,10 +7,13 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductDiscount;
+use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -86,9 +89,18 @@ Route::middleware('auth')->group(function () {
     Route::get('my-order', [CheckoutController::class, 'my_orders']);
     Route::get('order-detail/{id}', [CheckoutController::class, 'order_detail'])->name('order.detail');
 
+    // coupon
     Route::resource('coupons', CouponController::class);
     Route::get('admin/coupon-history/{id}', [CouponController::class, 'coupon_history'])->name('admin.coupon.history');
-});
+
+    // customer group
+    Route::resource('customer-group', CustomerGroupController::class);
+
+    // product discount
+    Route::resource('product-discount', ProductDiscountController::class);
+
+    
+}); 
  
 
 // checkout

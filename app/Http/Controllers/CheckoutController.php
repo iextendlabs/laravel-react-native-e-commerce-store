@@ -17,31 +17,43 @@ class CheckoutController extends Controller
     public function cart(Request $request)
     {
         $subtotal = 0;
+        $products = [];
+        $product_total = 0;
+        $code = $request->code;
         $coupon = Coupon::where('code', $request->code)->get()->first();
         $cart = session('cart', []);
         $coupon_data = session('coupon', []);
-        if (
-            $coupon && $coupon->status === 'enable' &&
-            strtotime($coupon->start_date) <= strtotime(date('Y-m-d')) &&
-            strtotime($coupon->end_date) >= strtotime(date('Y-m-d'))
-        ) {
-            session()->put('coupon', $coupon);
-        } elseif ($request->code) {
-            session()->forget('coupon');
-            flash()->addInfo('coupon in invalid');
-        } else {
-            session()->forget('coupon');
-        }
-        $products = [];
+
         foreach ($cart as $key => $value) {
             if (array_key_exists($key, $cart)) {
                 $product = Product::find($key);
                 if ($product) {
+                    $product_total += $product->price * $value['quantity'];
                     $product['quantity'] = $value['quantity'];
                     $products[] = $product;
                 }
             }
         }
+
+        // dd($coupon->isValid($code));
+
+        if ($coupon && $coupon->isValid($code)) {
+            $discount_value = $coupon->discount($cart, $product_total);
+            if ($discount_value != 0) {
+                $coupon['category_product_coupon'] = $discount_value;
+                session()->put('coupon', $coupon);
+            } else{
+                flash()->addInfo('coupon in invalid');
+                session()->forget('coupon');
+            }
+        } elseif ($request->code) {
+            flash()->addInfo('coupon in invalid');
+            session()->forget('coupon');
+        } else {
+            session()->forget('coupon');
+        }
+        
+        
         return view('checkout.cart', compact('products', 'coupon', 'coupon_data'));
     }
 
@@ -141,7 +153,7 @@ class CheckoutController extends Controller
         $total = 0;
         $final = 0;
         $discount = 0;
-
+        // dd($coupon->category_product_coupon);
         if ($request->country) {
             $data  = $request->all();
             $data['user_id'] = Auth::id();
@@ -159,12 +171,19 @@ class CheckoutController extends Controller
             $product->quantity = $quantity;
             $product->save();
             $subtotal += $product->price * $value['quantity'];
-            if ($coupon && $coupon->type === 'fixed amount') {
-                $final = $coupon->discount;
-                $total = ($subtotal + $discount) - $final;
-            } else if ($coupon && $coupon->type === 'percentage') {
-                $final = ($subtotal + $discount) * ($coupon->discount) / 100;
-                $total = ($subtotal + $discount) - $final;
+            if ($coupon && $coupon->category_product_coupon) {
+                $total = ($subtotal + $discount) - $coupon->category_product_coupon;
+            } elseif ($coupon &&  $coupon->category_product_coupon == 0) {
+
+                if ($coupon && $coupon->type === 'fixed amount') {
+                    $final = $coupon->discount;
+                    $total = ($subtotal + $discount) - $final;
+                } else if ($coupon && $coupon->type === 'percentage') {
+                    $final = ($subtotal + $discount) * ($coupon->discount) / 100;
+                    $total = ($subtotal + $discount) - $final;
+                } else {
+                    $total = $subtotal + $discount;
+                }
             } else {
                 $total = $subtotal + $discount;
             }
@@ -184,7 +203,7 @@ class CheckoutController extends Controller
             'discount' => $discount,
             'order_id' => $order->id
         ]);
-        // dd($total);
+
         if ($coupon) {
             $coupon_history = CouponHistory::create([
                 'discount_amount' => $final,

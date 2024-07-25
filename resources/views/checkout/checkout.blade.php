@@ -188,22 +188,30 @@
                                     class="ml-auto">{{ $total }}</span></h4>
                             <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Discount <span
                                     class="ml-auto">{{ $discount }}</span></h4>
-                            @if ($coupon_data)
+                            @if ($coupon_data )
+                                @if ($coupon_data->category_product_coupon)
                                 <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">
-                                    Coupon({{ $coupon_data->code }}) <span
+                                    ({{ $coupon_data->code }}) <span
                                         class="ml-auto">-{{ $coupon_data->discount }}</span></h4>
-                                @if ($coupon_data->type === 'percentage')
-                                    {{-- <span></span> --}}
                                     <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Total <span
-                                        class="ml-auto">{{ $total  - (( $coupon_data->discount * $total) / 100) }}</span></h4>
-                                @else
-                                <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Total <span
-                                    class="ml-auto">{{ $total + $discount - $coupon_data->discount }}</span></h4>
+                                        class="ml-auto">{{ $total - $discount - $coupon_data->category_product_coupon  }}</span></h4>
+                                        
+                                @elseif ($coupon_data->category_product_coupon == 0)
+                                    <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">
+                                        Coupon({{ $coupon_data->code }}) <span
+                                            class="ml-auto">-{{ $coupon_data->discount }}</span></h4>
+                                    @if ($coupon_data->type === 'percentage')
+                                        <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Total <span
+                                            class="ml-auto">{{ $total  - (( $coupon_data->discount * $total) / 100) }}</span></h4>
+                                    @else
+                                    <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Total <span
+                                        class="ml-auto">{{ $total - $discount - $coupon_data->discount }}</span></h4>
+                                    @endif
                                 @endif
 
                             @else
                                 <h4 class="flex flex-wrap gap-4 text-base text-[#333] font-bold">Total <span
-                                        class="ml-auto">{{ $total + $discount }}</span></h4>
+                                        class="ml-auto">{{ $total - $discount }}</span></h4>
                             @endif
                             
                         </div>

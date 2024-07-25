@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
 use App\Models\CustomerAddress;
+use App\Models\CustomerGroup;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
+
         return view('customer.create');
     }
 
@@ -64,7 +66,8 @@ class CustomerController extends Controller
     public function edit(string $id)
     {
         $customer = User::find($id);
-        return view('customer.edit', compact('customer'));
+        $customer_group = CustomerGroup::all();
+        return view('customer.edit', compact('customer', 'customer_group'));
     }
 
     /**

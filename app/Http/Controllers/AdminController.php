@@ -14,7 +14,11 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
-        return view('admin.dashboard');
+        if (Auth::user()->admin === 1) {
+            return view('admin.dashboard');
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**

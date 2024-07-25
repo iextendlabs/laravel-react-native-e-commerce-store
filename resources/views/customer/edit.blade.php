@@ -40,7 +40,19 @@
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="email" type="text" name="email" value="{{ $customer->email }}" placeholder="name">
             </div>
-
+            <div class="mt-4 mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="customer_groups_id">
+                    Customer Group
+                </label>
+                <select name="customer_groups_id" id="customer_groups_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    @foreach ($customer_group as $item)
+                        <option value="{{ $item->id }}" @if ($customer->customer_groups_id === $item->id) selected @endif>
+                            {{ $item->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            
             <div class="flex items-center justify-between">
                 <button
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

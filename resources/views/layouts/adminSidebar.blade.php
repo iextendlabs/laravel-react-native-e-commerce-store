@@ -39,13 +39,13 @@
             <i class="fad fa-sharp fa-regular fa-layer-group"></i>
             Category
         </a>
+
         <a href="/products"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
 
             <i class="fad fa-solid fa-shapes"></i>
             Products
         </a>
-
 
         <a href="/product-images"
             class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
@@ -85,7 +85,21 @@
             Coupons
         </a>
         <!-- end link -->
-        <p class="uppercase text-xs text-gray-600 mb-4 mt-4 tracking-wider">UI Elements</p>
+
+        <!-- link -->
+        <a href="{{ route('customer-group.index') }}"
+            class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+            <i class="fad fa-box-open text-xs mr-2"></i>
+            Customer Groups
+        </a>
+
+        <a href="{{ route('product-discount.index') }}"
+            class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+            <i class="fad fa-box-open text-xs mr-2"></i>
+            Product Discount 
+        </a>
+        <!-- end link -->
+        {{-- <p class="uppercase text-xs text-gray-600 mb-4 mt-4 tracking-wider">UI Elements</p>
 
         <!-- link -->
         <a href="#"
@@ -126,7 +140,7 @@
             Components
         </a>
         <!-- end link -->
-
+ --}}
 
 
     </div>

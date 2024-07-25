@@ -24,6 +24,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'password',
+        'customer_groups_id',
     ];
 
     /**
@@ -54,5 +55,11 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+
+    public function customer_group()
+    {
+        return $this->belongsTo(CustomerGroup::class, 'id','customer_groups_id');
     }
 }

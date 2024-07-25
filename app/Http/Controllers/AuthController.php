@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\CustomerGroup;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,7 +26,8 @@ class AuthController extends Controller
 
     public function register()
     {
-        return view('auth.register');
+        $customer_group = CustomerGroup::all();
+        return view('auth.register', compact('customer_group'));
     }
 
     public function forgot_password()
@@ -48,9 +50,8 @@ class AuthController extends Controller
         $request->session()->regenerate();
         if (Auth::user()->admin === 1) {
             return redirect()->route('admin.dashboard');
-        } else {
-            return redirect()->intended(RouteServiceProvider::HOME);
-        }
+        } 
+        return redirect()->intended(RouteServiceProvider::HOME);
         
 
     }

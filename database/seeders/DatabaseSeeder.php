@@ -18,12 +18,16 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             productSeeder::class,
         ]);
+        \App\Models\CustomerGroup::create([
+            'name' => 'whole sale',
+        ]);
 
         \App\Models\User::factory()->create([
             'name' => 'admin ',
             'email' => 'admin@gmail.com',
             'admin' => 1,
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
+            'customer_groups_id' => 1
         ]);
     }
 }

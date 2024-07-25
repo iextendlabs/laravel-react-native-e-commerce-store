@@ -67,7 +67,7 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        $data = $request->only('name', 'price', 'quantity', 'description', 'image');
+        $data = $request->only('name', 'price', 'quantity', 'description', 'image', 'category_id');
         if ($request->image) {
             $imagePath = 'storage/products/' . $product->image;
             $thumbPath = 'storage/products/thumb/' . $product->image;

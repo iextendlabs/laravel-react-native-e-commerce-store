@@ -62,7 +62,7 @@
                 @if (is_array($products) && count($products) > 0)
                     <div class="border-t mt-8">
                         <h1 class="mt-6 text-gray-800 font-semibold">Enter your coupon here</h1>
-                        <form action="/cart">
+                        <form action="{{ route('cart') }}">
                             <div class="relative mb-4 flex items-stretch mt-4">
                                 <input type="text" name="code"
                                     class="relative m-0 -me-px block flex-auto rounded-s border border-solid border-neutral-200 bg-transparent  bg-clip-padding px-3 py-4 text-base font-normal leading-[1.6] text-surface outline-none transition duration-200 ease-in-out placeholder:text-neutral-500 focus:z-[3] focus:border-primary focus:shadow-inset focus:outline-none motion-reduce:transition-none dark:border-white/10 dark:text-white dark:placeholder:text-neutral-200 dark:autofill:shadow-autofill dark:focus:border-primary"
@@ -88,14 +88,21 @@
                         <div class="flex font-semibold justify-between py-6 text-sm uppercase">
                             <span>Total cost</span>
                             @if (!empty($coupon_data) && is_object($coupon_data))
-                                @if ($coupon_data->type === 'percentage')
-                                    <span>{{ $subtotal - (( $coupon_data->discount * $subtotal  ) / 100)   }}</span>
+                                @if ($coupon_data->category_product_coupon)
+                                    <span>{{ $total - $coupon_data->category_product_coupon}}</span>
+                                @elseif ($coupon_data->category_product_coupon == 0)
+                                    @if ($coupon_data->type === 'percentage')
+                                        <span>{{ $subtotal - (($coupon_data->discount * $subtotal) / 100) }}</span>
+                                    @else
+                                        <span>{{ $total - $coupon_data->discount }}</span>
+                                    @endif
                                 @else
-                                    <span>{{ $total - $coupon_data->discount }}</span>
+                                    <span>{{ $subtotal }}</span>
                                 @endif
                             @else
                                 <span>{{ $subtotal }}</span>
                             @endif
+
 
                         </div>
                         
@@ -106,9 +113,12 @@
                                 Checkout</button>
                         </form>
 
-                        <a href="/" class="bg-indigo-500 font-semibold  hover:bg-indigo-600 py-3 text-sm text-white uppercase px-96 ml-20">
-                            Continue Shopping
-                        </a>
+                        <form action="/" method="GET">
+                            @csrf
+                            <button
+                                class="bg-indigo-500 font-semibold  hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full mb-6">
+                                Continue Shopping</button>
+                        </form>
                     </div>
                 @endif
             </div>

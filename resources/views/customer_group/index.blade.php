@@ -1,9 +1,9 @@
 <x-admin-layout>
     <div class="">
-        <h1>Coupons index </h1>
-        <a href="{{ route('coupons.create') }}"
+        <h1>Customer Group index </h1>
+        <a href="{{ route('customer-group.create') }}"
             class="bg-blue-500 float-right hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create
-            a Coupon</a>
+            a Groups</a>
     </div>
 
     <div class="flex flex-col my-10">
@@ -14,51 +14,32 @@
                         class="min-w-full border-2 border-gray-500 text-left text-sm font-light text-surface dark:text-white">
                         <thead class="border-b border-2 border-neutral-200 font-medium dark:border-white/10">
                             <tr>
-                                <th scope="col" class="px-6 py-4">Name</th>
-                                <th scope="col" class="px-6 py-4">Code</th>
-                                <th scope="col" class="px-6 py-4">Type</th>
-                                <th scope="col" class="px-6 py-4">Status</th>
-                                <th scope="col" class="px-6 py-4">Discount</th>
-                                <th scope="col" class="px-6 py-4">Start Date</th>
-                                <th scope="col" class="px-6 py-4">End Date</th>
+                                <th class="px-6 py-4">Name</th>
                                 <th scope="col" class="px-6 py-4">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($coupon->count() > 0)
-                                @foreach ($coupon as $item)
+                            @if ($customer_group->count() > 0)
+                                @foreach ($customer_group as $item)
                                     <tr class="border-2 border-neutral-200 dark:border-white/10">
                                         <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $item->name }}</td>
-                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->code }}</td>
-                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->type }}</td>
-                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->status }}</td>
-                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->discount }}</td>
-                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->start_date }}</td>
-                                        <td class="whitespace-nowrap px-6 py-4">{{ $item->end_date }}</td>
                                         <td class="whitespace-nowrap px-6 py-4 flex">
-                                            <a href="{{ route('coupons.edit',  $item->id) }}"
+                                            <a href="{{ route('customer-group.edit',  $item->id) }}"
                                                 class="text-blue-500 dark:text-gray-400">Edit</a>
-                                            <form
-                                                action="{{ route('coupons.destroy',  $item->id) }}"
-                                                method="POST">
+                                            <form action="{{ route('customer-group.destroy', $item->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
                                                     class="mx-2 text-red-500 dark:text-gray-400">Delete</button>
                                             </form>
-                                            <a href="{{ route('admin.coupon.history', $item->id) }}"
-                                                class="text-green-500 dark:text-gray-400">Coupon History</a>
                                         </td>
                                     </tr>
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="4">No coupon found.</td>
+                                    <td colspan="4">No found.</td>
                                 </tr>
                             @endif
-
-
-
                         </tbody>
                     </table>
                 </div>

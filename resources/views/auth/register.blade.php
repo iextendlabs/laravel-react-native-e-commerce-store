@@ -22,6 +22,17 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Customer group -->
+        <div class="mt-4">
+            <x-input-label for="email" :value="__('Customer Group')" />
+            <select name="customer_groups_id" id="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value=""></option>
+                @foreach ($customer_group as $item)
+                <option value="{{ $item->id}}" > {{ $item->name}} </option>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('customer_groups_id')" class="mt-2" />
+        </div>
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
