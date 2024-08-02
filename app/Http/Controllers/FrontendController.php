@@ -26,7 +26,6 @@ class FrontendController extends Controller
     public function product_detail(Product $product)
     {
         return view('product.product_detail', compact('product'));
-        // dd($product);
     }
 
 

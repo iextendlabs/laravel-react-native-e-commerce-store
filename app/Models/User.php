@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public function customer_group()
     {
-        return $this->belongsTo(CustomerGroup::class, 'id','customer_groups_id');
+        return $this->belongsTo(CustomerGroup::class);
     }
 }

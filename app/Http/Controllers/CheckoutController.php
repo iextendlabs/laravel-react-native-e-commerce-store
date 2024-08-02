@@ -35,8 +35,6 @@ class CheckoutController extends Controller
             }
         }
 
-        // dd($coupon->isValid($code));
-
         if ($coupon && $coupon->isValid($code)) {
             $discount_value = $coupon->discount($cart, $product_total);
             if ($discount_value != 0) {
@@ -131,7 +129,6 @@ class CheckoutController extends Controller
 
         $cart = session()->get('cart', []);
         $coupon_data = session()->get('coupon', []);
-        // dd($coupon_data);
         $products = [];
         if (auth()->user()) {
             foreach ($cart as $key => $value) {
@@ -153,7 +150,6 @@ class CheckoutController extends Controller
         $total = 0;
         $final = 0;
         $discount = 0;
-        // dd($coupon->category_product_coupon);
         if ($request->country) {
             $data  = $request->all();
             $data['user_id'] = Auth::id();

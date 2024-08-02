@@ -1078,7 +1078,8 @@
                         <div class="pt-3 flex items-center justify-between">
                             <p class="">{{ $item->name }}</p>
                         </div>
-                        <p class="pt-1 text-gray-900">Rs: {{ number_format($item->price ?? 'No Price') }}</p>
+
+                        <p class="pt-1 text-gray-900">Rs: {{ $item->discount_product->discount_price ?? 0 }}</p>
                     </a>
                     @if ($item->quantity > 0)
                     <a href="{{ route('add.to.cart', $item->id) }}" class="bg-blue-500 hover:bg-blue-700 text-center text-white font-bold py-2 px-4 rounded">
